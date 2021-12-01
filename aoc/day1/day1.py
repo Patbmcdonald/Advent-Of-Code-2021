@@ -44,7 +44,7 @@ How many measurements are larger than the previous measurement?
 
 '''
 
-from aoc.helpers import read_file_to_list, convert_str_to_int_list
+from aoc.helpers import read_file_to_list,  convert_str_to_int_list
 
 part1_test_set = convert_str_to_int_list(read_file_to_list("/day1/day1_part1_test.txt"))
 day1_input_set = convert_str_to_int_list(read_file_to_list("/day1/day1.txt"))
@@ -53,10 +53,12 @@ part2_test_set = convert_str_to_int_list(read_file_to_list("/day1/day1_part2_tes
 """
 Simple Count increasing
 """
-def count_increasing(data_set):
+def count_increasing(data_set :list[int]):
     
     currentCnt = 0
+    
     for i in range(1, len(data_set)):
+        
         if data_set[i] > data_set[i - 1]:
             currentCnt += 1
         
@@ -66,9 +68,10 @@ def count_increasing(data_set):
 """
  Sliding Window portion
 """
-def count_sliding_windowincreasing(data_set):
+def count_sliding_window_increasing(data_set: list[int]):
     
     currentCnt = 0
+    
     for i in range(3, len(data_set)):
         
         firstSum = data_set[i - 1] + data_set[i - 2] + data_set[i - 3]
@@ -84,7 +87,6 @@ assert count_increasing(part1_test_set) == 7
 
 print("solution 1:", count_increasing(day1_input_set))
 
-assert count_sliding_windowincreasing(part2_test_set) == 5
-
-print("solution 2:", count_sliding_windowincreasing(day1_input_set))
+assert count_sliding_window_increasing(part2_test_set) == 5
+print("solution 2:", count_sliding_window_increasing(day1_input_set))
 
