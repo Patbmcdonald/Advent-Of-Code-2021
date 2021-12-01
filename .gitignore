@@ -1,0 +1,4 @@
+__pycache__
+aoc.egg-info/
+*.pyc
+.DS_Store
