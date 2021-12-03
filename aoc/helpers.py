@@ -22,4 +22,9 @@ def read_file_to_list(datapath, strip=True):
 def convert_str_to_int_list(thisList) -> list[int]:
     return [int(i) for i in thisList]
 
+def convert_int_list_to_int(integers: list[int]) -> int:
+    return int("".join([str(integer) for integer in integers]))
+
+def convert_int_list_to_str(integers: list[int]) -> str:
+    return "".join([str(integer) for integer in integers])
     
