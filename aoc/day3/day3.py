@@ -42,11 +42,12 @@ part1_input_set = read_file_to_list("/day3/day3_part1.txt")
 
 
 """
-Calculate final position and depth 
+Calculate the power consumption from our diagnostic report.
 """
 def get_power_consumption(data_set: list[str]) -> int:
     
-    cache = format_data(data_set)
+    cache = format_data_cache(data_set)
+    
     gamma_list = []
     epsilon_list = []
     
@@ -63,24 +64,94 @@ def get_power_consumption(data_set: list[str]) -> int:
     
     return gamma_decimal * epsilon_decimal
 
-def format_data(data_set: list[str]) -> dict:
+
+"""
+Calculate the life support rating consumption from our diagnostic report.
+"""
+def get_life_support_rating(data_set: list[str]) -> int:
+    
+    
+    first_element = data_set[0]
+    oxygen_generator_list = data_set
+    co_scrubber_list = data_set
+    
+    
+    for i in range(0, len(first_element)):
+        oxygen_generator_list  = update_list(oxygen_generator_list, i, True)
+        co_scrubber_list  = update_list(co_scrubber_list, i, False)
+         
+    return int(oxygen_generator_list[0], 2) * int(co_scrubber_list[0], 2)
+
+'''
+get the updated list the occurances, and return the bigger or smaller depending on isOxy flag
+'''
+def update_list(data_set: list[str], pos: int, isOxy: bool = False)  -> list[str]:
+    current_list = []
+    cache = {}
+    
+    if len(data_set) == 1:
+        return data_set
+    
+    for i in range(0, len(data_set)):
+        format_data(cache, data_set[i])
+         
+    for i in range(0, len(data_set)):
+        if(compare_function(cache[pos], isOxy) == int(data_set[i][pos])):
+            current_list.append(data_set[i])
+    
+    return current_list
+
+'''
+Caculate the occurances, and return the bigger or smaller depending on isOxy flag
+'''
+def compare_function(data_set: list[int], isOxy: bool) -> int:
+    num_of_ones = 0
+    num_of_zeroes = 0
+    
+    for bit in data_set:
+        if bit == 1:
+            num_of_ones += 1
+        else:
+            num_of_zeroes += 1
+            
+    if isOxy: 
+        return 1 if num_of_ones >= num_of_zeroes else 0
+    else:
+         return 1 if num_of_zeroes > num_of_ones else 0
+    
+'''
+Format our data set into a managable data structure of a list of digits in a position
+'''
+def format_data_cache(data_set: list[str]) -> dict:
     cache = {}
     
     for currentBinary in data_set:
-        thisIndex = 0
-        for currentDigit in currentBinary:
-            if thisIndex not in cache:
-                cache[thisIndex] = []
-                
-            cache[thisIndex].append(int(currentDigit))
-            thisIndex += 1
+        format_data(cache, currentBinary)
             
     return cache
-    
+
+
+'''
+Format our data set into a managable data structure of a list of digits in a position
+'''
+def format_data(cache: dict, currentBinary:str):
+    thisIndex = 0
+    for currentDigit in currentBinary:
+        if thisIndex not in cache:
+            cache[thisIndex] = []
+                
+        cache[thisIndex].append(int(currentDigit))
+        thisIndex += 1        
+'''
+Get max value from data set
+'''
 def get_max(data: list[int]) -> int:
     return max(set(data), key = data.count)
 
 
+'''
+Get min value from data set
+'''
 def get_min(data: list[int]) -> int:
     return min(set(data), key = data.count)
 
@@ -88,3 +159,6 @@ def get_min(data: list[int]) -> int:
 assert get_power_consumption(part1_test_set) == 198
 
 print(get_power_consumption(part1_input_set))
+
+assert get_life_support_rating(part1_test_set) == 230
+print(get_life_support_rating(part1_input_set))
